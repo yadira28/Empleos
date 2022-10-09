@@ -33,4 +33,10 @@ public class VacantesServiceJpa implements IVacantesService {
 
 	}
 
+	
+	public List<Vacante> buscarDestacadas() {
+		
+		return vacantesRepo.findByDestacadoAndEstatusOrderByIdDesc(1, "Aprobada");
+	}
+
 }
