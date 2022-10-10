@@ -1,12 +1,13 @@
 package com.example.empleos.service.db;
 
-
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.empleos.model.Vacante;
@@ -50,6 +51,11 @@ public class VacantesServiceJpa implements IVacantesService {
 	@Override
 	public List<Vacante> buscarByExample(Example<Vacante> example) {
 		return vacantesRepo.findAll(example);
+	}
+
+	@Override
+	public Page<Vacante> buscarTodas(Pageable page) {
+		return vacantesRepo.findAll(page);
 	}
 
 }

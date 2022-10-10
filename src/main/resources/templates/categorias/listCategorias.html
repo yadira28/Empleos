@@ -6,7 +6,6 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="favicon.ico">
-
     <title>EmpleosApp | Listado de Categorías</title>
     <!-- Bootstrap core CSS -->
     <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
@@ -15,15 +14,11 @@
     <link th:href="@{/bootstrap/css/sticky-footer-navbar.css}" rel="stylesheet">
     <link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet">
   </head>
-
   <body>
-
     <header th:insert="fragments/menu :: menu-principal"></header>
-
     <main role="main">     
       <hr>
       <div class="container"> 
-
         <div class="card">
           <h4 class="card-header"><strong>Listado de Categorías</strong></h4>              
           <div class="card-body">
@@ -51,19 +46,14 @@
                 </tr>                              
               </tbody>
             </table>
-            
+
+            <nav th:if="${categorias.totalPages > 0}" aria-label="Page navigation example" >
+				<ul class="pagination"> 
+					<li class="page-item"><a th:href="@{/categorias/indexPaginate(page=${categorias.number - 1})}" class="page-link">Anterior</a></li>
+					<li class="page-item"><a th:href="@{/categorias/indexPaginate(page=${categorias.number + 1})}" class="page-link">Siguiente</a></li> 
+				</ul>
+		   </nav>
+
           </div>
         </div>
       </div> <!-- /container -->
-
-    </main>
-
-    <footer th:insert="fragments/footer :: pie-pagina" class="footer"></footer>
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>     
-  </body>
-</html>

@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -39,7 +41,7 @@ public class VacantesController {
 	private IVacantesService serviceVacantes;
 	
 	@Autowired
-	@Qualifier("categoriasServiceJpa")
+	//@Qualifier("categoriasServiceJpa")
 	private ICategoriasService serviceCategorias; 
 	
 	@GetMapping("/index")
@@ -49,6 +51,13 @@ public class VacantesController {
 		return "vacantes/listVacantes";
 	}
 	
+	@GetMapping(value = "/indexPaginate")
+	public String mostrarIndexPaginado(Model model, Pageable page) {
+		Page<Vacante> lista = serviceVacantes.buscarTodas(page);
+		model.addAttribute("vacantes", lista);
+		return "vacantes/listVacantes";
+	}
+
 	@GetMapping("/create")
 	public String crear(Vacante vacante, Model model) {
 		return "vacantes/formVacante";
@@ -98,17 +107,16 @@ public class VacantesController {
 	public String eliminar(@PathVariable("id") int idVacante, RedirectAttributes attributes) {
 		System.out.println("Borrando vacante con id: " + idVacante);
 		serviceVacantes.eliminar(idVacante);
-		attributes.addFlashAttribute("msg", "La vacante fue eliminada!");
+		attributes.addFlashAttribute("msg","La vacante fue eliminada!");
 		return "redirect:/vacantes/index";
 	}
+	
 	@GetMapping("/edit/{id}")
 	public String editar(@PathVariable("id") int idVacante, Model model) {
-		Vacante vacante = serviceVacantes.buscarPorId(idVacante);	
+		Vacante vacante = serviceVacantes.buscarPorId(idVacante);
 		model.addAttribute("vacante", vacante);
 		return "vacantes/formVacante";
-		
 	}
-	
 	
 	@GetMapping("/view/{id}")
 	public String verDetalle(@PathVariable("id") int idVacante, Model model) {		
@@ -121,9 +129,8 @@ public class VacantesController {
 	}
 	
 	@ModelAttribute
-	public void setGenericos(Model model) {
+	public void setGenerico(Model model) {
 		model.addAttribute("categorias", serviceCategorias.buscarTodas() );
-		
 	}
 	
 	@InitBinder

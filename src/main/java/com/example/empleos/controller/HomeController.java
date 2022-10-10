@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
@@ -35,6 +36,40 @@ public class HomeController {
 	@Autowired
 	private IUsuariosService serviceUsuarios;
 	
+	@GetMapping("/tabla")
+	public String mostrarTabla(Model model) {
+		List<Vacante> lista = serviceVacantes.buscarTodas();
+		model.addAttribute("vacantes", lista);
+		
+		return "tabla";
+	}
+	
+	@GetMapping("/detalle")
+	public String mostrarDetalles(Model model) {
+		Vacante vacante = new Vacante();
+		vacante.setNombre("Ingeniero de comunicaciones");
+		vacante.setDescripcion("Se solicita ingeniero para dar soporte a internet");
+		vacante.setFecha(new Date());
+		vacante.setSalario(9700.0);
+		
+		model.addAttribute("vacante", vacante);
+		
+		return "detalle";
+	}
+	
+	@GetMapping("/listado")
+	public String mostrarListado(Model model) {
+		List<String> lista = new LinkedList<String>();
+		lista.add("Ingeniero de Sistemas");
+		lista.add("Auxiliar de Contabilidad");
+		lista.add("Vendedor");
+		lista.add("Arquitecto");
+		
+		model.addAttribute("empleos", lista);
+		
+		return "listado";
+	}
+	
 	@GetMapping("/")
 	public String mostrarHome(Model model) {
 		return "home";
@@ -61,47 +96,20 @@ public class HomeController {
 		 return "redirect:/usuarios/index";
 	}
 	
-	@GetMapping("/tabla")
-	public String mostrarTabla(Model model) {
-		List<Vacante> lista = serviceVacantes.buscarTodas();
-		model.addAttribute("vacantes", lista);
-		
-		return "tabla";
-	}
-	
-	@GetMapping("/detalle")
-	public String mostrarDetalles(Model model) {
-		Vacante vacante = new Vacante();
-		vacante.setNombre("Ingeniero de comunicaciones");
-		vacante.setDescripcion("Se solicita ingeniero para dar soporte a internet");
-		vacante.setFecha(new Date());
-		vacante.setSalario(9700.0);
-		model.addAttribute("vacante", vacante);
-		return "detalle";
-	}
-	
-	@GetMapping("/listado")
-	public String mostrarListado(Model model) {
-		List<String> lista = new LinkedList<String>();
-		lista.add("Ingeniero de Sistemas");
-		lista.add("Auxiliar de Contabilidad");
-		lista.add("Vendedor");
-		lista.add("Arquitecto");
-		
-		model.addAttribute("empleos", lista);
-		
-		return "listado";
-	}
 	@GetMapping("/search")
 	public String buscar(@ModelAttribute("search") Vacante vacante, Model model) {
 		System.out.println("Buscando por : " + vacante);
 		
-		Example<Vacante> example = Example.of(vacante);
+		ExampleMatcher matcher = ExampleMatcher.
+				// where descripcion like '%?%'
+				matching().withMatcher("descripcion", ExampleMatcher.GenericPropertyMatchers.contains());
+		
+		Example<Vacante> example = Example.of(vacante, matcher);
 		List<Vacante> lista = serviceVacantes.buscarByExample(example);
 		model.addAttribute("vacantes", lista);
 		return "home";
-		
 	}
+	
 	/**
 	 * InitBinder para Strings si los detecta vacios en el Data Binding los settea a NULL
 	 * @param binder
