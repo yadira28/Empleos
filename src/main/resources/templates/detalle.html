@@ -7,7 +7,7 @@
     <meta name="author" content="">
     <link rel="icon" href="favicon.ico">
 
-    <title>EmpleosApp | Detalles de la Oferta de Trabajo</title>
+  <title>EmpleosApp | Detalles de la Oferta de Trabajo</title>
     <!-- Bootstrap core CSS -->
     <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
     <!-- Custom styles for this template -->
@@ -27,7 +27,7 @@
 
         <div class="row">
           <div class="col-md-3">            
-            <img class="rounded mx-auto d-block" th:src="@{/Logos/{img} (img=${vacante.imagen} ) }" alt="Generic placeholder image" width="220" height="220">            
+            <img class="rounded mx-auto d-block" th:src="@{/logos/{img} (img=${vacante.imagen}) }" alt="Generic placeholder image" width="220" height="220">            
           </div>
           <div class="col-md-9">
             <div class="card">
@@ -64,3 +64,4 @@
     <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
   </body>
 </html>
+  

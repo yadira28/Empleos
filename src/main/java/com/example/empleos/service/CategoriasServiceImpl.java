@@ -3,7 +3,6 @@ package com.example.empleos.service;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import com.example.empleos.model.Categoria;
@@ -83,6 +82,11 @@ public class CategoriasServiceImpl implements ICategoriasService{
 			}
 		}		
 		return null;	
+	}
+
+	public void eliminar(Integer idCategoria) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
