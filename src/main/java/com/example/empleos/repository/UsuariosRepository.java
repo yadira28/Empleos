@@ -9,4 +9,6 @@ import com.example.empleos.model.Usuario;
 
 public interface UsuariosRepository extends JpaRepository<Usuario, Integer> {
 
+	Usuario findByUsername(String username);
+
 }
