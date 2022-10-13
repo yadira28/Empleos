@@ -12,13 +12,16 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.empleos.model.Perfil;
@@ -39,6 +42,9 @@ public class HomeController {
 	
 	@Autowired
 	private IUsuariosService serviceUsuarios;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	@GetMapping("/tabla")
 	public String mostrarTabla(Model model) {
@@ -73,6 +79,11 @@ public class HomeController {
 		
 		return "listado";
 	}
+	@GetMapping("/bcrypt/{texto}")
+	@ResponseBody
+	public String encriptar(@PathVariable("texto") String texto) {
+		return texto + "Encriptado en Bcrypt: " + passwordEncoder.encode(texto);
+	}
 	
 	@GetMapping("/")
 	public String mostrarHome(Model model) {
@@ -102,6 +113,9 @@ public class HomeController {
 	
 	@PostMapping("/signup")
 	public String guardarRegistro(Usuario usuario, RedirectAttributes attributes) {
+		 String pwdPlano = usuario.getPassword();
+		 String pwdEncriptado = passwordEncoder.encode(pwdPlano);
+		 usuario.setPassword(pwdEncriptado);
 		
 		 usuario.setEstatus(1);
 		 usuario.setFechaRegistro(new Date());
